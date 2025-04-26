@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 
-const Event = sequelize.define('Events', {
+const Event = sequelize.define('Event', {   // Table name usually singular in model
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -14,12 +14,6 @@ const Event = sequelize.define('Events', {
     },
     venue: {
         type: DataTypes.STRING
-    },
-    image: {
-        type: DataTypes.STRING
-    },
-    images: {
-        type: DataTypes.JSON  // for multiple images
     },
     nominationLink: {
         type: DataTypes.STRING

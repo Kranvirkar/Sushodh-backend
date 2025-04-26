@@ -1,13 +1,15 @@
-module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('EventImage', {
-        image_url: {
-            type: DataTypes.STRING
-        },
-        event_id: {
-            type: DataTypes.INTEGER
-        }
-    }, {
-        tableName: 'event_images',
-        timestamps: false
-    });
-};
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/dbConfig');
+
+const EventImage = sequelize.define('EventImage', {
+    eventId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    image: {
+        type: DataTypes.BLOB('long'),
+        allowNull: false
+    }
+});
+
+module.exports = EventImage;
