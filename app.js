@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const paymentRoutes = require("./routes/paymentRoutes");
+const sliderImageRoutes = require("./routes/sliderImageRoutes");
 //const connectDB = require("./config/dbConfig");
 const { swaggerUi, specs } = require("./swagger");
 const { port } = require("./config/phonepeConfig");
@@ -34,7 +35,7 @@ app.use("/api/events", eventRoutes);
 //app.use(errorHandler);
 
 
-
+app.use("/api/sliderImages", sliderImageRoutes);
 app.use("/api", paymentRoutes);
 
 // Swagger UI

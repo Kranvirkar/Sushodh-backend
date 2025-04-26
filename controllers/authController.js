@@ -7,9 +7,9 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './Config.env' });
 // Register User
 exports.registerUser = async (req, res) => {
-    const { email, password, passwordConfirm, roleId } = req.body;
+    const { email, password, passwordConfirm, role } = req.body;
 
-    if (!email || !password || !passwordConfirm || !roleId) {
+    if (!email || !password || !passwordConfirm || !role) {
         return res.status(400).json({ msg: 'All fields are required' });
     }
 
@@ -29,7 +29,7 @@ exports.registerUser = async (req, res) => {
         const newUser = await User.create({
             email,
             password,
-            roleId
+            role
         });
 
         res.status(201).json({ msg: 'User registered successfully' });
