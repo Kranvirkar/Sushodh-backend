@@ -30,7 +30,7 @@ module.exports = pool.promise(); // use promise-based queries
 */
 
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+require('dotenv').config({path:'././Config.env'});
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,

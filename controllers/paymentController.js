@@ -5,6 +5,9 @@ const uniqid = require("uniqid"); // or consider using uuid
 const Payment = require('../models/Payment');
 const {generatePhonePeSignature, getPaymentStatusFromPhonePe} = require("../utils/phonepeHelper");
 const db = require('../config/dbConfig'); // path to your db.js
+const dotenv = require('dotenv');
+
+dotenv.config({ path: './Config.env' });
 
 
 const apiPath = "/pg/v1/pay";
