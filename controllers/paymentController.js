@@ -6,6 +6,7 @@ const Payment = require('../models/Payment');
 const {generatePhonePeSignature, getPaymentStatusFromPhonePe} = require("../utils/phonepeHelper");
 const db = require('../config/dbConfig'); // path to your db.js
 const dotenv = require('dotenv');
+const { v4: uuidv4 } = require('uuid');
 
 dotenv.config({ path: './Config.env' });
 
@@ -14,7 +15,7 @@ const apiPath = "/pg/v1/pay";
 
 
 const createPayment = async (req, res) => {
-    const { amount, mobileNumber,name,email } = req.body;
+    const { amount, mobileNumber,name,email,reason } = req.body;
 
     // Basic validation
     if (!amount || amount <= 0) {
@@ -25,7 +26,8 @@ const createPayment = async (req, res) => {
         return res.status(400).json({ success: false, message: "Invalid mobile number" });
     }
 
-    const userId = "MUID123";
+    const userId = uuidv4();
+    //const userId = "MUID123";
     const merchantTransactionId = `TXN-${uniqid()}` // Consider switching to UUID for better uniqueness
 
     const normalPayLoad = {
@@ -48,8 +50,8 @@ const createPayment = async (req, res) => {
     const stringToHash = base64EncodedPayload + apiPath + saltKey;
     const sha256Hash = sha256(stringToHash);
     const xVerifyChecksum = `${sha256Hash}###${saltIndex}`;
-    console.log(`base64EncodedPayload: ${base64EncodedPayload}`)
-    console.log(`xVerifyChecksum: ${xVerifyChecksum}`);
+    //console.log(`base64EncodedPayload: ${base64EncodedPayload}`)
+    //console.log(`xVerifyChecksum: ${xVerifyChecksum}`);
     console.log(`${baseUrl}${apiPath}`)
     try {
         const response = await axios.post(
@@ -66,37 +68,8 @@ const createPayment = async (req, res) => {
 
         const paymentLink = response.data.data.instrumentResponse.redirectInfo.url;
 
-        // await Payment.create({
-        //     merchantTransactionId,
-        //     userId,
-        //     amount,
-        //     merchantId,
-        //     paymentLink,
-        //     status: 'PENDING',
-        // });
 
         console.log(merchantTransactionId, mobileNumber, amount, merchantId, paymentLink,  name, email)
-/*
-        // Save to MySQL
-        const insertQuery = `
-            INSERT INTO payments 
-                (merchantTransactionId, mobileNumber, amount, merchantId, paymentLink, status, name, email)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-
-        const values = [
-            merchantTransactionId,
-            mobileNumber,
-            amount,
-            merchantId,
-            paymentLink,
-            'PENDING',
-            name,
-            email
-        ];
-
-        await db.query(insertQuery, values); // ✅ fixed query usage
-*/
 
         await Payment.create({
             merchantTransactionId,
@@ -106,7 +79,8 @@ const createPayment = async (req, res) => {
             paymentLink,
             status: 'PENDING',
             name,
-            email
+            email,
+            reason
         });
 
         console.log(`[Payment Initiated] Transaction ID: ${merchantTransactionId}`);

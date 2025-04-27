@@ -6,7 +6,6 @@ const db = {};
 
 // Attach Sequelize connection
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 // Import your models here
 db.SliderImage = require('./sliderImage')(sequelize, DataTypes);
@@ -14,4 +13,15 @@ db.SliderImage = require('./sliderImage')(sequelize, DataTypes);
 // (in future you can import more models like this)
 // db.User = require('./user')(sequelize, DataTypes);
 
-module.exports = db;
+const Event = require('./Event');
+const EventImage = require('./EventImage');
+
+// Associations
+Event.hasMany(EventImage, { foreignKey: 'eventId', as: 'images' });
+EventImage.belongsTo(Event, { foreignKey: 'eventId', as: 'event' });
+
+module.exports = {
+    Event,
+    EventImage,
+    db
+};

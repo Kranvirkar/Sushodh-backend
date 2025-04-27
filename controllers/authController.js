@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const Role = require('../models/role'); // assuming Role is imported for proper include
+const User = require('../models/user');// assuming Role is imported for proper include
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './Config.env' });
@@ -49,8 +48,7 @@ exports.loginUser = async (req, res) => {
 
     try {
         const user = await User.findOne({
-            where: { email },
-            include: [{ model: Role, attributes: ['id', 'name'] }]
+            where: { email }
         });
 
         if (!user) {
