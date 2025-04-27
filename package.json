@@ -36,6 +36,7 @@
     "sha256": "^0.2.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "uniqid": "^5.4.0"
+    "uniqid": "^5.4.0",
+    "uuid": "^11.1.0"
   }
 }

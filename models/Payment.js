@@ -10,6 +10,7 @@ const Payment = sequelize.define('Payment', {
     paymentLink: { type: DataTypes.STRING, allowNull: false },
     status: { type: DataTypes.STRING, allowNull: false, defaultValue: 'PENDING' },
     name: { type: DataTypes.STRING, allowNull: false },
+    reason:{ type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false },
 }, {
     tableName: 'payments',

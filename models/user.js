@@ -1,29 +1,7 @@
-/*
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/dbConfig');
-const Role = require('./role');
-
-const User = sequelize.define('User', {
-    email: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-});
-
-User.belongsTo(Role, { foreignKey: 'roleId' });
-Role.hasMany(User, { foreignKey: 'roleId' });
-
-module.exports = User;
-*/
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/dbConfig');
-const Role = require('./role');
+
 
 const User = sequelize.define('User', {
     email: {
@@ -70,10 +48,6 @@ User.beforeUpdate(async (user) => {
         user.passwordChangedAt = new Date(Date.now() - 1000);
     }
 });
-
-// Associations
-User.belongsTo(Role, { foreignKey: 'roleId' });
-Role.hasMany(User, { foreignKey: 'roleId' });
 
 // Instance Methods
 User.prototype.correctPassword = async function(candidatePassword) {

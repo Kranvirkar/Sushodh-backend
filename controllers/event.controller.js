@@ -72,7 +72,7 @@ exports.getAllEvents = async (req, res, next) => {
             }
             return eventJson;
         });
-
+        console.log(eventsWithImages)
         res.status(200).json(eventsWithImages);
 
     } catch (error) {
