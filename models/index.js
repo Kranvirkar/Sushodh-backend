@@ -1,27 +1,18 @@
-const sequelize = require('../config/dbConfig'); // adjust the path if needed
+const sequelize = require('../config/dbConfig');
 const { Sequelize, DataTypes } = require('sequelize');
 
-// Initialize an empty object to collect all models
 const db = {};
 
-// Attach Sequelize connection
 db.sequelize = sequelize;
 
-// Import your models here
-db.SliderImage = require('./sliderImage')(sequelize, DataTypes);
+// Import models
+db.SliderImage = require('./sliderImage')(sequelize, DataTypes); // function-based import
+db.Gallery = require('./Gallery')(sequelize, DataTypes); // function-based import
+db.Event = require('./Event'); // directly imported
+db.EventImage = require('./EventImage'); // directly imported
 
-// (in future you can import more models like this)
-// db.User = require('./user')(sequelize, DataTypes);
+// Define associations
+db.Event.hasMany(db.EventImage, { foreignKey: 'eventId', as: 'images' });
+db.EventImage.belongsTo(db.Event, { foreignKey: 'eventId', as: 'event' });
 
-const Event = require('./Event');
-const EventImage = require('./EventImage');
-
-// Associations
-Event.hasMany(EventImage, { foreignKey: 'eventId', as: 'images' });
-EventImage.belongsTo(Event, { foreignKey: 'eventId', as: 'event' });
-
-module.exports = {
-    Event,
-    EventImage,
-    db
-};
+module.exports = db;

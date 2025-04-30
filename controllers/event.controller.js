@@ -22,7 +22,7 @@ exports.createEvent = async (req, res, next) => {
         });
 
         // Step 2: Save uploaded images (if any)
-        if (req.files && req.files.length > 0) {
+       /* if (req.files && req.files.length > 0) {
             const images = req.files.map(file => {
                 const imageBuffer = fs.readFileSync(file.path);
 
@@ -39,7 +39,36 @@ exports.createEvent = async (req, res, next) => {
 
             // Bulk create all images at once
             await EventImage.bulkCreate(images);
+        }*/
+
+        if (req.files && req.files.length > 0) {
+            const images = [];
+
+            for (const file of req.files) {
+                try {
+                    const imageBuffer = fs.readFileSync(file.path);
+                    images.push({
+                        eventId: event.id,
+                        image: imageBuffer
+                    });
+                } catch (err) {
+                    console.error('Error reading file:', file.path, err);
+                } finally {
+                    fs.unlink(file.path, (err) => {
+                        if (err) console.error('Error deleting file:', file.path, err);
+                    });
+                }
+            }
+
+            if (images.length > 0) {
+                try {
+                    await EventImage.bulkCreate(images);
+                } catch (err) {
+                    console.error('Error saving images to DB:', err);
+                }
+            }
         }
+
 
         res.status(201).json({ message: 'Event created successfully with images', event });
 

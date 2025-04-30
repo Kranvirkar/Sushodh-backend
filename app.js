@@ -14,6 +14,7 @@ const helmet = require('helmet');
 const errorHandler = require("./middelware/errorHandler");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require('./controllers/errorController');
+const galleryRoutes = require("./routes/GalleryRoutes");
 
 dotenv.config({path:'./Config.env'});
 const app = express();
@@ -34,7 +35,7 @@ app.use('/api/auth', authRoutes);
 app.use("/api/events", eventRoutes);
 //app.use(errorHandler);
 
-
+app.use("/api/gallery", galleryRoutes);
 app.use("/api/sliderImages", sliderImageRoutes);
 app.use("/api", paymentRoutes);
 
